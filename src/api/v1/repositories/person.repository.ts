@@ -26,6 +26,7 @@ export class PersonRepository
       this.person_model.count({ ...condition, deleted_at: null }),
       this.person_model
         .find({ ...condition, deleted_at: null }, projection)
+        .sort({ created_at: -1 })
         .populate(populate),
     ]);
     return {

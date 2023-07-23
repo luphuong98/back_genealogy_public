@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './api/v1/modules/user/user.module';
-import { AuthenticationModule } from './api/v1/modules/authentication/authentication.module';
 import { PersonModule } from './api/v1/modules/person/person.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { database_config } from './config/database/database.config';
 import { DBValidationModule } from './config/database/db-validation.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { MarriagePersonModule } from '@modules/marriage_person/marriage-person.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,10 +17,21 @@ import { DBValidationModule } from './config/database/db-validation.module';
       cache: true,
       expandVariables: true,
     }),
-    AuthenticationModule,
-    UserModule,
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const database = configService.get('DB_NAME');
+        const host = configService.get('DB_URI');
+        return {
+          uri: host,
+          dbName: database,
+        };
+      },
+      inject: [ConfigService],
+    }),
     PersonModule,
     DBValidationModule,
+    MarriagePersonModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -23,12 +23,12 @@ export class CreatePersonDto {
   @Type(() => CreateInfoDto)
   extra_info: CreateInfoDto;
 
-  @IsOptional()
-  @IsArray()
-  @Type(() => CreatePersonDto)
-  ancestors?: CreatePersonDto[];
+  // @IsOptional()
+  // @IsArray()
+  // @Type(() => CreatePersonDto)
+  // ancestors?: CreatePersonDto[];
 
-  @IsOptional()
-  @Type(() => CreatePersonDto)
-  parent?: CreatePersonDto;
+  // @IsOptional()
+  // @Type(() => CreatePersonDto)
+  // parent?: CreatePersonDto;
 }

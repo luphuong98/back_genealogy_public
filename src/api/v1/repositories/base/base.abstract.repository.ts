@@ -19,7 +19,10 @@ export abstract class BaseRepositoryAbstract<T extends BaseEntity>
 
   async findOneById(id: string): Promise<T> {
     const item = await this.model.findById(id);
-    return item.deleted_at ? null : item;
+    if (item) {
+      return item.deleted_at ? null : item;
+    }
+    return null;
   }
 
   async findOneByCondition(condition = {}): Promise<T> {
@@ -37,11 +40,9 @@ export abstract class BaseRepositoryAbstract<T extends BaseEntity>
   ): Promise<FindAllResponse<T>> {
     const [count, items] = await Promise.all([
       this.model.count({ ...condition, deleted_at: null }),
-      this.model.find(
-        { ...condition, deleted_at: null },
-        options?.projection,
-        options,
-      ),
+      this.model
+        .find({ ...condition, deleted_at: null }, options?.projection, options)
+        .sort({ created_at: -1 }),
     ]);
     return {
       count,

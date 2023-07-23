@@ -1,5 +1,7 @@
 export const Key_Error_Person = {
   CANNOT_CREATE_PERSON: 'Cannot create new person',
+  CANNOT_UPDATE_PERSON: 'Cannot Update Person',
+  EMAIL_ALREADY_EXISTS: 'Email already exists',
 };
 
 export const Key_Error = {

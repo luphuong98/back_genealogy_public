@@ -21,6 +21,12 @@
       "@modules/*": [
         "src/api/v1/modules/*"
       ],
+      "@repositories/*": [
+        "src/api/v1/repositories*"
+      ],
+      "@config/*": [
+        "src/config*"
+      ],
     },
   }
 }

@@ -8,6 +8,13 @@ export type ExtraInfoDocument = HydratedDocument<ExtraInfo>;
 
 @Schema({
   collection: 'extra-information',
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  },
+  toJSON: {
+    getters: true,
+  },
 })
 export class ExtraInfo extends BaseEntity {
   @Prop({
@@ -29,6 +36,22 @@ export class ExtraInfo extends BaseEntity {
     },
   })
   last_name: string;
+
+  @Prop({
+    required: false,
+    maxlength: 60,
+    default: '',
+    set: (chinese_name: string) => {
+      return chinese_name.trim();
+    },
+  })
+  chinese_name: string;
+
+  @Prop({
+    default: '',
+    maxlength: 60,
+  })
+  note_name: string;
 
   @Prop()
   birthday: Date;
@@ -60,14 +83,18 @@ export class ExtraInfo extends BaseEntity {
   @Prop({
     default: '',
   })
-  note: Text;
+  note: string[];
 
   @Expose({ name: 'full_name' })
   get fullName(): string {
     return `${this.first_name} ${this.last_name}`;
   }
+  @Expose({ name: 'birth_death_date' })
+  get birthDeathDate(): string {
+    return `${this.birthday}-${this.dead_day}`;
+  }
 }
 
 const ExtraInfoSchema = SchemaFactory.createForClass(ExtraInfo);
-ExtraInfoSchema.index({ first_name: 1, last_name: 1 });
+ExtraInfoSchema.index({ first_name: 1, last_name: 1, chinese_name: 1 });
 export { ExtraInfoSchema };
