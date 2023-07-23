@@ -26,7 +26,6 @@ import * as Joi from 'joi';
         abortEarly: false,
       },
     }),
-    
   ],
 })
 export class DBValidationModule {}

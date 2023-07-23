@@ -2,25 +2,32 @@ import {
   IsDateString,
   IsEnum,
   IsNotEmpty,
-  IsNumberString,
   IsOptional,
-  IsPostalCode,
   IsString,
   MaxLength,
-  MinLength,
 } from 'class-validator';
 import { GENDER } from 'src/api/v1/common/shared/enum/gender.enum';
 
 export class CreateInfoDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(50)
+  @MaxLength(60)
   first_name: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(50)
+  @MaxLength(60)
   last_name: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(60)
+  chinese_name?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(60)
+  note_name?: string;
 
   @IsOptional()
   @IsDateString()
@@ -47,5 +54,5 @@ export class CreateInfoDto {
   address?: string;
 
   @IsOptional()
-  note?: Text;
+  note?: string[];
 }

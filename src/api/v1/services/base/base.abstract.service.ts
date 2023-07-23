@@ -1,7 +1,7 @@
-import { BaseEntity } from 'src/api/v1/entities/base/base.entity';
 import { BaseServiceInterface } from './base.interface.service';
 import { BaseRepositoryInterface } from '../../repositories/base/base.interface.repository';
 import { FindAllResponse } from '../../common/types/common.type';
+import { BaseEntity } from '../../entities/base/base.entity';
 
 export abstract class BaseServiceAbstract<T extends BaseEntity>
   implements BaseServiceInterface<T>
@@ -33,5 +33,9 @@ export abstract class BaseServiceAbstract<T extends BaseEntity>
 
   async remove(id: string) {
     return await this.repository.softDelete(id);
+  }
+
+  async permanentlyDelete(id: string) {
+    return await this.repository.permanentlyDelete(id);
   }
 }

@@ -1,28 +1,32 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Expose } from 'class-transformer';
 import { BaseEntity } from './base/base.entity';
-import { RELATION } from '../common/shared/enum/relation.enum';
-import { ExtraInfo, ExtraInfoSchema } from './extra_info.entity';
+import { ExtraInfo } from './extra_info.entity';
 import { Person } from './person.entity';
+import { Type } from 'class-transformer';
 
 export type MarriagePersonDocument = HydratedDocument<MarriagePerson>;
 
-@Schema()
+@Schema({
+  collection: 'marriage-person',
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  },
+})
 export class MarriagePerson extends BaseEntity {
-  @Prop({
-    type: RELATION,
-  })
-  relation: RELATION;
+  @Prop()
+  relation: string;
 
   @Prop({
-    type: ExtraInfoSchema,
+    type: ExtraInfo,
   })
+  @Type(() => ExtraInfo)
   extra_info: ExtraInfo;
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
-    ref: Person.name,
+    ref: 'Person',
     required: true,
   })
   person: Person;

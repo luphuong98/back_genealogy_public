@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Model } from 'mongoose';
-import { Expose } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { BaseEntity } from './base/base.entity';
-import { ExtraInfo, ExtraInfoSchema } from './extra_info.entity';
+import { ExtraInfo } from './extra_info.entity';
 import { OtherPeopleDocument } from './other_people.entity';
 import { MarriagePerson } from './marriage_person.entity';
 import { NextFunction } from 'express';
@@ -10,6 +10,11 @@ import { NextFunction } from 'express';
 export type PersonDocument = HydratedDocument<Person>;
 
 @Schema({
+  collection: 'person',
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  },
   toJSON: {
     getters: true,
     // virtuals: true,
@@ -37,8 +42,9 @@ export class Person extends BaseEntity {
   phone_number: string;
 
   @Prop({
-    type: ExtraInfoSchema,
+    type: ExtraInfo,
   })
+  @Type(() => ExtraInfo)
   extra_info: ExtraInfo;
 
   @Prop({
@@ -58,19 +64,20 @@ export class Person extends BaseEntity {
   // marriage_person: MarriagePeople[];
 
   @Prop({
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: Person.name }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Person' }],
     default: null,
   })
   ancestors: Person[];
 
   @Prop({
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: Person.name }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Person' }],
     default: null,
   })
   parent: Person;
 }
 
 const PersonSchema = SchemaFactory.createForClass(Person);
+
 PersonSchema.index({ email: 1, phone_number: 1 }, { unique: true });
 export { PersonSchema };
 
@@ -95,16 +102,14 @@ export const PersonSchemaFactory = (
           person: person._id,
         })
         .exec(),
+      this.model
+        .deleteMany({
+          parent: person._id,
+        })
+        .exec(),
     ]);
     return next();
   });
 
-  // user_schema.virtual('default_address').get(function (this: UserDocument) {
-  //   if (this.address.length) {
-  //     return `${(this.address[0].street && ' ') || ''}${this.address[0].city} ${
-  //       this.address[0].state
-  //     } ${this.address[0].country}`;
-  //   }
-  // });
   return person_schema;
 };
