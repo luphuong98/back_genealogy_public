@@ -14,3 +14,8 @@ export const Key_Success_Marriage = {
   DELETE_MARRIAGE: 'Deleted-Successfully',
   DELETE_MARRIAGE_PERSON: 'Deleted-Successfully',
 };
+
+export const Key_Success_Other = {
+  CREATE_OTHER: 'Create-New-Other-People-Successfully',
+  UPDATE_OTHER: 'Update-Other-People-Successfully',
+};

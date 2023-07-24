@@ -14,6 +14,7 @@ export type ExtraInfoDocument = HydratedDocument<ExtraInfo>;
   },
   toJSON: {
     getters: true,
+    virtuals: true,
   },
 })
 export class ExtraInfo extends BaseEntity {
@@ -97,4 +98,8 @@ export class ExtraInfo extends BaseEntity {
 
 const ExtraInfoSchema = SchemaFactory.createForClass(ExtraInfo);
 ExtraInfoSchema.index({ first_name: 1, last_name: 1, chinese_name: 1 });
+
+// ExtraInfoSchema.virtual('fullName').get(function (this: ExtraInfoDocument) {
+//   return `${this.first_name} ${this.last_name}`;
+// });
 export { ExtraInfoSchema };
