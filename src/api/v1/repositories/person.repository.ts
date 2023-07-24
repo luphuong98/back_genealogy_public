@@ -40,11 +40,4 @@ export class PersonRepository
       items,
     };
   }
-
-  // async findOneWithSubFields(
-  //   condition: FilterQuery<PersonDocument>,
-  //   populate?: string[] | PopulateOptions | PopulateOptions[],
-  // ): Promise<Person> {
-
-  // }
 }
