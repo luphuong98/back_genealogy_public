@@ -4,7 +4,7 @@ import { Person, PersonDocument } from 'src/api/v1/entities/person.entity';
 import { PersonRepositoryInterface } from '@modules/person/interfaces/person.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, PopulateOptions } from 'mongoose';
-import { FindAllResponse } from '../common/types/common.type';
+import { FindAllResponse, FindOneResponse } from '../common/types/common.type';
 
 @Injectable()
 export class PersonRepository
@@ -16,6 +16,12 @@ export class PersonRepository
     private readonly person_model: Model<PersonDocument>,
   ) {
     super(person_model);
+  }
+  findOneWithSubFields(
+    condition: object,
+    populate?: any,
+  ): Promise<FindOneResponse<Person>> {
+    throw new Error('Method not implemented.');
   }
   async findAllWithSubFields(
     condition: FilterQuery<PersonDocument>,
@@ -34,4 +40,11 @@ export class PersonRepository
       items,
     };
   }
+
+  // async findOneWithSubFields(
+  //   condition: FilterQuery<PersonDocument>,
+  //   populate?: string[] | PopulateOptions | PopulateOptions[],
+  // ): Promise<Person> {
+
+  // }
 }

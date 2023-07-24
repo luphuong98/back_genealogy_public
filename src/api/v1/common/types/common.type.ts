@@ -5,6 +5,8 @@ export enum SORT_TYPE {
 
 export type FindAllResponse<T> = { count: number; items: T[] };
 
+export type FindOneResponse<T> = { item: T };
+
 export type SortParams = { sort_by: string; sort_type: SORT_TYPE };
 
 export type SearchParams = { keywork: string; field: string };
