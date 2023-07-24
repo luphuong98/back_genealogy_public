@@ -1,12 +1,11 @@
 import { BaseRepositoryInterface } from 'src/api/v1/repositories/base/base.interface.repository';
-import { Person } from '../../../entities/person.entity';
+import { MarriagePerson } from 'src/api/v1/entities/marriage_person.entity';
 import { FindAllResponse } from 'src/api/v1/common/types/common.type';
-
-export interface PersonRepositoryInterface
-  extends BaseRepositoryInterface<Person> {
+export interface MarriagePersonRepositoryInterface
+  extends BaseRepositoryInterface<MarriagePerson> {
   findAllWithSubFields(
     condition: object,
     projection?: string,
     populate?: string[] | any,
-  ): Promise<FindAllResponse<Person>>;
+  ): Promise<FindAllResponse<MarriagePerson>>;
 }

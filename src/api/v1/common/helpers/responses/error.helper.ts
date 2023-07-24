@@ -1,7 +1,14 @@
 export const Key_Error_Person = {
-  CANNOT_CREATE_PERSON: 'Cannot create new person',
-  CANNOT_UPDATE_PERSON: 'Cannot Update Person',
-  EMAIL_ALREADY_EXISTS: 'Email already exists',
+  CANNOT_CREATE_PERSON: 'Cannot-Create-New-Person',
+  CANNOT_UPDATE_PERSON: 'Cannot-Update-Person',
+  EMAIL_ALREADY_EXISTS: 'Email-already-exists',
+};
+
+export const Key_Error_Marriage = {
+  CANNOT_CREATE_MARRIAGE: 'Cannot-Create-Marriage-Person',
+  NOT_FOUND_PERSON: 'Not-Found-Person',
+  NOT_FOUND_MARRIAGE_PERSON: 'Not-Found-Marriage-Person',
+  CANNOT_UPDATE_MARRIAGE: 'Cannot-Update-Marriage-Person',
 };
 
 export const Key_Error = {

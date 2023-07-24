@@ -1,25 +1,22 @@
+import { CreateInfoDto } from '@modules/person/dtos/create-info.dto';
 import { Type } from 'class-transformer';
 import {
-  IsArray,
-  IsEmail,
   IsNotEmpty,
   IsOptional,
-  MaxLength,
+  IsString,
   ValidateNested,
 } from 'class-validator';
-import { CreateInfoDto } from './create-info.dto';
 
-export class CreatePersonDto {
-  @IsNotEmpty()
-  @MaxLength(50)
-  @IsEmail()
-  email: string;
-
-  @IsNotEmpty()
-  phone_number: string;
+export class CreateMarriageDto {
+  @IsOptional()
+  @IsString()
+  relation?: string;
 
   @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => CreateInfoDto)
   extra_info: CreateInfoDto;
+
+  @IsNotEmpty()
+  person: string;
 }

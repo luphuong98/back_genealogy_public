@@ -56,7 +56,8 @@ export class PersonService extends BaseServiceAbstract<Person> {
     );
   }
 
-  async getOnePerson(id: string) {
+  async getOnePerson(id: string): Promise<Person> {
+    // const person = await this.personRepository.findOneWithSubFields();
     return await this.personRepository.findOneById(id);
   }
 

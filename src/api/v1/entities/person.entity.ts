@@ -3,7 +3,7 @@ import mongoose, { HydratedDocument, Model } from 'mongoose';
 import { Type } from 'class-transformer';
 import { BaseEntity } from './base/base.entity';
 import { ExtraInfo } from './extra_info.entity';
-import { OtherPeopleDocument } from './other_people.entity';
+import { OtherPeople, OtherPeopleDocument } from './other_people.entity';
 import { MarriagePerson } from './marriage_person.entity';
 import { NextFunction } from 'express';
 
@@ -53,15 +53,15 @@ export class Person extends BaseEntity {
   })
   image: string;
 
-  // @Prop({
-  //   type: [{ type: mongoose.Schema.Types.ObjectId, ref: OtherPeople.name }],
-  // })
-  // other_people: OtherPeople[];
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: OtherPeople.name }],
+  })
+  other_people: OtherPeople[];
 
-  // @Prop({
-  //   type: [{ type: mongoose.Schema.Types.ObjectId, ref: MarriagePeople.name }],
-  // })
-  // marriage_person: MarriagePeople[];
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: MarriagePerson.name }],
+  })
+  marriage_person: MarriagePerson[];
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Person' }],

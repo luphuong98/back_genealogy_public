@@ -7,6 +7,7 @@ import { database_config } from './config/database/database.config';
 import { DBValidationModule } from './config/database/db-validation.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MarriagePersonModule } from '@modules/marriage_person/marriage-person.module';
+import { OtherPeopleModule } from './api/v1/modules/other_people/other_people.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MarriagePersonModule } from '@modules/marriage_person/marriage-person.m
     PersonModule,
     DBValidationModule,
     MarriagePersonModule,
+    OtherPeopleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
