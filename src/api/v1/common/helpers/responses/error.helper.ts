@@ -11,6 +11,13 @@ export const Key_Error_Marriage = {
   CANNOT_UPDATE_MARRIAGE: 'Cannot-Update-Marriage-Person',
 };
 
+export const Key_Error_Other = {
+  CANNOT_CREATE_OTHER: 'Cannot-Create-Other-People',
+  NOT_FOUND_PERSON: 'Not-Found-Person',
+  NOT_FOUND_OTHER_PEOPLE: 'Not-Found-Other-People',
+  CANNOT_UPDATE_OTHER: 'Cannot-Update-Other-People',
+};
+
 export const Key_Error = {
   PASSWORD_NOT_MATCH: 'PassWord does not Match',
   EMAIL_NOT_MATCH: 'Email does not Match',

@@ -3,7 +3,7 @@ import mongoose, { HydratedDocument, Model } from 'mongoose';
 import { Type } from 'class-transformer';
 import { BaseEntity } from './base/base.entity';
 import { ExtraInfo } from './extra_info.entity';
-import { OtherPeople, OtherPeopleDocument } from './other_people.entity';
+import { OtherPeopleDocument } from './other_people.entity';
 import { MarriagePerson } from './marriage_person.entity';
 import { NextFunction } from 'express';
 
@@ -53,15 +53,15 @@ export class Person extends BaseEntity {
   })
   image: string;
 
-  @Prop({
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: OtherPeople.name }],
-  })
-  other_people: OtherPeople[];
+  // @Prop({
+  //   type: [{ type: mongoose.Schema.Types.ObjectId, ref: OtherPeople.name }],
+  // })
+  // other_people: OtherPeople[];
 
-  @Prop({
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: MarriagePerson.name }],
-  })
-  marriage_person: MarriagePerson[];
+  // @Prop({
+  //   type: [{ type: mongoose.Schema.Types.ObjectId, ref: MarriagePeople.name }],
+  // })
+  // marriage_person: MarriagePeople[];
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Person' }],
@@ -91,20 +91,23 @@ export const PersonSchemaFactory = (
   person_schema.pre('findOneAndDelete', async function (next: NextFunction) {
     // OTHER USEFUL METHOD: getOptions, getPopulatedPaths, getQuery = getFilter, getUpdate
     const person = await this.model.findOne(this.getFilter());
+    const listPerson = await this.model.find({ ancestors: person._id });
+    const ids = listPerson.map((item) => item._id);
+    // console.log('hung dayne', ids);
     await Promise.all([
       other_people_model
         .deleteMany({
-          person: person._id,
+          person: [...ids, person._id],
         })
         .exec(),
       marriage_person_model
         .deleteMany({
-          person: person._id,
+          person: [...ids, person._id],
         })
         .exec(),
       this.model
         .deleteMany({
-          parent: person._id,
+          ancestors: person._id,
         })
         .exec(),
     ]);

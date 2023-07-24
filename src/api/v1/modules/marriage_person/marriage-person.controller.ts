@@ -60,7 +60,7 @@ export class MarriagePersonController {
   }
 
   @Patch(':id')
-  async updatePerson(
+  async updateMarriagePerson(
     @Res() res: Response,
     @Param('id') id: string,
     @Body() updateMarriageDto: UpdateMarriageDto,

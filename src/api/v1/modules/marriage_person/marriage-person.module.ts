@@ -7,15 +7,14 @@ import {
   MarriagePerson,
   MarriagePersonSchema,
 } from '../../entities/marriage_person.entity';
-import { PersonRepository } from '@repositories//person.repository';
-import { Person, PersonSchema } from '../../entities/person.entity';
+import { PersonModule } from '@modules/person/person.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: MarriagePerson.name, schema: MarriagePersonSchema },
-      { name: Person.name, schema: PersonSchema },
     ]),
+    PersonModule,
   ],
   controllers: [MarriagePersonController],
   providers: [
@@ -24,7 +23,6 @@ import { Person, PersonSchema } from '../../entities/person.entity';
       provide: 'MarriageRepositoryInterface',
       useClass: MarriagePersonRepository,
     },
-    { provide: 'PersonRepositoryInterface', useClass: PersonRepository },
   ],
   exports: [MarriagePersonService],
 })

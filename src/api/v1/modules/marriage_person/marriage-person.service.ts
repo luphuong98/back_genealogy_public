@@ -8,19 +8,18 @@ import { MarriagePersonRepositoryInterface } from './interfaces/marriage-person.
 import { BaseServiceAbstract } from '../../services/base/base.abstract.service';
 import { MarriagePerson } from '../../entities/marriage_person.entity';
 import { CreateMarriageDto } from './dtos/create-marriage.dto';
-import { NOTFOUND } from 'dns';
 import { Key_Error_Marriage } from '../../common/helpers/responses';
 import { FindAllResponse } from '../../common/types/common.type';
-import { PersonRepositoryInterface } from '@modules/person/interfaces/person.interface';
 import { UpdateMarriageDto } from './dtos/update-marriage.dto';
+import { PersonService } from '@modules/person/person.service';
 
 @Injectable()
 export class MarriagePersonService extends BaseServiceAbstract<MarriagePerson> {
   constructor(
     @Inject('MarriageRepositoryInterface')
     private readonly marriageRepository: MarriagePersonRepositoryInterface,
-    @Inject('PersonRepositoryInterface')
-    private readonly personRepository: PersonRepositoryInterface,
+    @Inject(PersonService)
+    private readonly personService: PersonService,
   ) {
     super(marriageRepository);
   }
@@ -29,7 +28,7 @@ export class MarriagePersonService extends BaseServiceAbstract<MarriagePerson> {
     createMarriageDto: CreateMarriageDto,
   ): Promise<MarriagePerson> {
     const id = createMarriageDto.person;
-    const checkPerson = await this.personRepository.findOneById(id);
+    const checkPerson = await this.personService.getOnePerson(id);
     if (!checkPerson) {
       throw new NotFoundException(Key_Error_Marriage.NOT_FOUND_PERSON);
     }
@@ -49,9 +48,6 @@ export class MarriagePersonService extends BaseServiceAbstract<MarriagePerson> {
     const checkPerson = await this.marriageRepository.findAllWithSubFields(
       condition,
     );
-    if (!checkPerson) {
-      throw new NotFoundException(Key_Error_Marriage.NOT_FOUND_PERSON);
-    }
     return checkPerson;
   }
 
