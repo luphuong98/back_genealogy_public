@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Model } from 'mongoose';
-import { Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { BaseEntity } from './base/base.entity';
 import { ExtraInfo } from './extra_info.entity';
 import { OtherPeopleDocument } from './other_people.entity';
@@ -17,7 +17,11 @@ export type PersonDocument = HydratedDocument<Person>;
   },
   toJSON: {
     getters: true,
-    // virtuals: true,
+    virtuals: true,
+  },
+  toObject: {
+    getters: true,
+    virtuals: true,
   },
 })
 export class Person extends BaseEntity {
@@ -65,15 +69,24 @@ export class Person extends BaseEntity {
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Person' }],
-    default: null,
+    default: [],
   })
   ancestors: Person[];
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Person' }],
-    default: null,
+    default: [],
   })
   parent: Person;
+
+  // @Expose({ name: 'full_name' })
+  // get fullName(): string {
+  //   return `${this.extra_info.first_name} ${this.extra_info.last_name}`;
+  // }
+  // @Expose({ name: 'birth_death_date' })
+  // get birthDeathDate(): string {
+  //   return `${this.extra_info.birthday}-${this.extra_info.dead_day}`;
+  // }
 }
 
 const PersonSchema = SchemaFactory.createForClass(Person);
@@ -81,7 +94,12 @@ const PersonSchema = SchemaFactory.createForClass(Person);
 PersonSchema.index({ email: 1, phone_number: 1 }, { unique: true });
 export { PersonSchema };
 
-// PersonSchema.virtual('extra_info')
+PersonSchema.virtual('full_name').get(function (this: PersonDocument) {
+  return `${this.extra_info.first_name} ${this.extra_info.last_name}`;
+});
+PersonSchema.virtual('birth_death_date').get(function (this: PersonDocument) {
+  return `${this.extra_info.birthday}-${this.extra_info.dead_day}`;
+});
 
 export const PersonSchemaFactory = (
   other_people_model: Model<OtherPeopleDocument>,

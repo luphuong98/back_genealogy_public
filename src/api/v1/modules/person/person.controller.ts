@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   Res,
 } from '@nestjs/common';
@@ -15,9 +16,46 @@ import { PersonService } from './person.service';
 import { Request, Response } from 'express';
 import { Key_Success_Person } from '../../common/helpers/responses';
 import { UpdatePersonDto } from './dtos/update-person.dto';
+import { ConditionPerson } from './interfaces/search.interface';
+
 @Controller('person')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
+
+  @Get('search')
+  async searchPerson(
+    @Res() res: Response,
+    @Query('name') full_name = '',
+    @Query('phone') phone = '',
+    @Query('email') email = '',
+    @Query('address') address = '',
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    const condition: ConditionPerson = {};
+
+    if (full_name) {
+      condition.full_name = full_name;
+    }
+    if (phone) {
+      condition.phone_number = phone;
+    }
+    if (email) {
+      condition.email = email;
+    }
+    if (address) {
+      condition.address = address;
+    }
+    const person = await this.personService.getOnePersonDetail(
+      condition,
+      parseInt(page.toString(), 10),
+      parseInt(limit.toString(), 10),
+    );
+    return res.status(HttpStatus.OK).json({
+      message: Key_Success_Person.GET_PERSON,
+      person,
+    });
+  }
   @Post()
   async createNewPerson(
     @Res() res: Response,
@@ -51,7 +89,14 @@ export class PersonController {
 
   @Get(':id')
   async getOnePerson(@Param('id') id: string, @Res() res: Response) {
-    const person = await this.personService.getOnePerson(id);
+    const condition: ConditionPerson = { _id: id };
+    const page = 1;
+    const limit = 10;
+    const person = await this.personService.getOnePersonDetail(
+      condition,
+      page,
+      limit,
+    );
     return res.status(HttpStatus.OK).json({
       message: Key_Success_Person.GET_PERSON,
       data: person,

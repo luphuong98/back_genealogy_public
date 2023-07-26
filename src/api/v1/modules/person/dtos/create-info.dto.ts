@@ -31,11 +31,11 @@ export class CreateInfoDto {
 
   @IsOptional()
   @IsDateString()
-  birthday?: Date;
+  birthday?: string;
 
   @IsOptional()
   @IsDateString()
-  dead_day?: Date;
+  dead_day?: string;
 
   @IsOptional()
   @IsEnum(GENDER)

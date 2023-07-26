@@ -5,7 +5,11 @@ import { PersonRepositoryInterface } from './interfaces/person.interface';
 import { CreatePersonDto } from './dtos/create-person.dto';
 import { FindAllResponse } from '../../common/types/common.type';
 import { UpdatePersonDto } from './dtos/update-person.dto';
-import { Key_Error_Person } from '../../common/helpers/responses';
+import {
+  Key_Error_Marriage,
+  Key_Error_Person,
+} from '../../common/helpers/responses';
+import { ConditionPerson } from './interfaces/search.interface';
 
 @Injectable()
 export class PersonService extends BaseServiceAbstract<Person> {
@@ -50,15 +54,31 @@ export class PersonService extends BaseServiceAbstract<Person> {
     condition?: object,
     projection?: string,
   ): Promise<FindAllResponse<Person>> {
-    return await this.personRepository.findAllWithSubFields(
-      condition,
-      projection,
-    );
+    // return await this.personRepository.findAllWithSubFields(
+    //   condition,
+    //   projection,
+    // );
+    return await this.personRepository.findAllShort();
   }
 
   async getOnePerson(id: string): Promise<Person> {
-    // const person = await this.personRepository.findOneWithSubFields();
     return await this.personRepository.findOneById(id);
+  }
+
+  async getOnePersonDetail(
+    condition?: ConditionPerson,
+    page?: number,
+    limit?: number,
+  ): Promise<FindAllResponse<Person>> {
+    const person = await this.personRepository.findPersonWithOtherAndMarriage(
+      condition,
+      page,
+      limit,
+    );
+    if (!person) {
+      throw new BadRequestException(Key_Error_Marriage.NOT_FOUND_PERSON);
+    }
+    return person;
   }
 
   async updatePerson(

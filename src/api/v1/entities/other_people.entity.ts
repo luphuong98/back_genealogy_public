@@ -14,7 +14,7 @@ export type OtherPeopleDocument = HydratedDocument<OtherPeople>;
   },
 })
 export class OtherPeople extends BaseEntity {
-  @Prop()
+  @Prop({ default: '' })
   relation: string;
 
   @Prop({
@@ -31,3 +31,9 @@ export class OtherPeople extends BaseEntity {
 }
 
 export const OtherPeopleSchema = SchemaFactory.createForClass(OtherPeople);
+
+OtherPeopleSchema.virtual('full_name').get(function (
+  this: OtherPeopleDocument,
+) {
+  return `${this.extra_info.first_name} ${this.extra_info.last_name}`;
+});

@@ -16,6 +16,9 @@ export type ExtraInfoDocument = HydratedDocument<ExtraInfo>;
     getters: true,
     virtuals: true,
   },
+  toObject: {
+    getters: true,
+  },
 })
 export class ExtraInfo extends BaseEntity {
   @Prop({
@@ -54,11 +57,11 @@ export class ExtraInfo extends BaseEntity {
   })
   note_name: string;
 
-  @Prop()
-  birthday: Date;
+  @Prop({ default: '' })
+  birthday: string;
 
-  @Prop()
-  dead_day: Date;
+  @Prop({ default: '' })
+  dead_day: string;
 
   @Prop({
     enum: GENDER,
@@ -85,21 +88,12 @@ export class ExtraInfo extends BaseEntity {
     default: '',
   })
   note: string[];
-
-  @Expose({ name: 'full_name' })
-  get fullName(): string {
-    return `${this.first_name} ${this.last_name}`;
-  }
-  @Expose({ name: 'birth_death_date' })
-  get birthDeathDate(): string {
-    return `${this.birthday}-${this.dead_day}`;
-  }
 }
 
 const ExtraInfoSchema = SchemaFactory.createForClass(ExtraInfo);
 ExtraInfoSchema.index({ first_name: 1, last_name: 1, chinese_name: 1 });
 
-// ExtraInfoSchema.virtual('fullName').get(function (this: ExtraInfoDocument) {
-//   return `${this.first_name} ${this.last_name}`;
-// });
 export { ExtraInfoSchema };
+ExtraInfoSchema.virtual('full_name').get(function (this: ExtraInfoDocument) {
+  return `${this.first_name} ${this.last_name}`;
+});
