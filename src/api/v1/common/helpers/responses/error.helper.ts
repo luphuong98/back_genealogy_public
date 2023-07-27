@@ -2,6 +2,7 @@ export const Key_Error_Person = {
   CANNOT_CREATE_PERSON: 'Cannot-Create-New-Person',
   CANNOT_UPDATE_PERSON: 'Cannot-Update-Person',
   EMAIL_ALREADY_EXISTS: 'Email-already-exists',
+  NOT_FOUND_PERSON: 'Not-Found-Person',
 };
 
 export const Key_Error_Marriage = {

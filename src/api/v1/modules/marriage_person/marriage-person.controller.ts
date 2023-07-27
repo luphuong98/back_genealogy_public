@@ -15,12 +15,19 @@ import { Request, Response } from 'express';
 import { CreateMarriageDto } from './dtos/create-marriage.dto';
 import { Key_Success_Marriage } from '../../common/helpers/responses';
 import { UpdateMarriageDto } from './dtos/update-marriage.dto';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('marriage-person(wives-husbands)')
 @Controller('marriage-person')
 export class MarriagePersonController {
   constructor(private readonly marriageService: MarriagePersonService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Admin create a new marriage person',
+    description: '- person is required',
+  })
+  @ApiBody({ type: CreateMarriageDto })
   async createMarriagePerson(
     @Res() res: Response,
     @Body() createMarriageDto: CreateMarriageDto,
@@ -39,6 +46,10 @@ export class MarriagePersonController {
     });
   }
   @Get('/all/:personId')
+  @ApiOperation({
+    summary:
+      'User enter personId to find all marriage-person belongs to person',
+  })
   async getAllMarriagePersonByPersonId(
     @Param('personId') id: string,
     @Res() res: Response,
@@ -51,6 +62,9 @@ export class MarriagePersonController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'User finds a marriage-person by id',
+  })
   async getOneMarriagePerson(@Param('id') id: string, @Res() res: Response) {
     const person = await this.marriageService.getOneMarriagePerson(id);
     return res.status(HttpStatus.OK).json({
@@ -60,10 +74,14 @@ export class MarriagePersonController {
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Admin update a marriage-person',
+  })
+  @ApiBody({ type: CreateMarriageDto })
   async updateMarriagePerson(
     @Res() res: Response,
     @Param('id') id: string,
-    @Body() updateMarriageDto: UpdateMarriageDto,
+    @Body() updateMarriageDto: CreateMarriageDto,
   ) {
     const person = await this.marriageService.updateMariagePerson(
       id,

@@ -1,11 +1,20 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { BaseServiceAbstract } from '../../services/base/base.abstract.service';
 import { Person } from '../../entities/person.entity';
 import { PersonRepositoryInterface } from './interfaces/person.interface';
 import { CreatePersonDto } from './dtos/create-person.dto';
 import { FindAllResponse } from '../../common/types/common.type';
 import { UpdatePersonDto } from './dtos/update-person.dto';
-import { Key_Error_Person } from '../../common/helpers/responses';
+import {
+  Key_Error_Marriage,
+  Key_Error_Person,
+} from '../../common/helpers/responses';
+import { ConditionPerson } from './interfaces/search.interface';
 
 @Injectable()
 export class PersonService extends BaseServiceAbstract<Person> {
@@ -36,7 +45,7 @@ export class PersonService extends BaseServiceAbstract<Person> {
 
     if (!parentNode) {
       // return null;
-      throw new BadRequestException(Key_Error_Person.CANNOT_CREATE_PERSON);
+      throw new NotFoundException(Key_Error_Person.NOT_FOUND_PERSON);
     }
 
     const newPerson = await this.personRepository.create({
@@ -44,21 +53,40 @@ export class PersonService extends BaseServiceAbstract<Person> {
       parent: parentNode,
       ancestors: parentNode.ancestors.concat(parentNode),
     });
+    if (!newPerson) {
+      throw new BadRequestException(Key_Error_Person.CANNOT_CREATE_PERSON);
+    }
     return newPerson;
   }
   async getAllPerson(
     condition?: object,
     projection?: string,
   ): Promise<FindAllResponse<Person>> {
-    return await this.personRepository.findAllWithSubFields(
-      condition,
-      projection,
-    );
+    // return await this.personRepository.findAllWithSubFields(
+    //   condition,
+    //   projection,
+    // );
+    return await this.personRepository.findAllShort();
   }
 
   async getOnePerson(id: string): Promise<Person> {
-    // const person = await this.personRepository.findOneWithSubFields();
     return await this.personRepository.findOneById(id);
+  }
+
+  async getOnePersonDetail(
+    condition?: ConditionPerson,
+    page?: number,
+    limit?: number,
+  ): Promise<FindAllResponse<Person>> {
+    const person = await this.personRepository.findPersonWithOtherAndMarriage(
+      condition,
+      page,
+      limit,
+    );
+    if (!person) {
+      throw new BadRequestException(Key_Error_Marriage.NOT_FOUND_PERSON);
+    }
+    return person;
   }
 
   async updatePerson(
@@ -66,6 +94,10 @@ export class PersonService extends BaseServiceAbstract<Person> {
     updatePersonDto: UpdatePersonDto,
     email?: string,
   ) {
+    const checkPerson = await this.personRepository.findOneById(id);
+    if (!checkPerson) {
+      throw new BadRequestException(Key_Error_Person.NOT_FOUND_PERSON);
+    }
     const checkEmail = await this.personRepository.findOneByCondition({
       email,
       _id: { $nin: id },

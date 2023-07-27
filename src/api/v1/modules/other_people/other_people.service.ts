@@ -67,6 +67,7 @@ export class OtherPeopleService extends BaseServiceAbstract<OtherPeople> {
     if (!checkPerson) {
       throw new NotFoundException(Key_Error_Other.NOT_FOUND_OTHER_PEOPLE);
     }
+    console.log(updateOtherDto);
     const update = await this.otherRepository.update(id, updateOtherDto);
     if (!update) {
       throw new BadRequestException(Key_Error_Other.CANNOT_UPDATE_OTHER);

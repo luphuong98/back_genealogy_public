@@ -15,7 +15,7 @@ export type MarriagePersonDocument = HydratedDocument<MarriagePerson>;
   },
 })
 export class MarriagePerson extends BaseEntity {
-  @Prop()
+  @Prop({ default: '' })
   relation: string;
 
   @Prop({
