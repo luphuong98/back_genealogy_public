@@ -17,12 +17,19 @@ import {
   Key_Success_Other,
 } from '../../common/helpers/responses';
 import { UpdateOtherDto } from './dtos/update-other.dto';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('other-people(sons-daughters)')
 @Controller('other-people')
 export class OtherPeopleController {
   constructor(private readonly otherService: OtherPeopleService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Admin create a new other person',
+    description: '- person is required',
+  })
+  @ApiBody({ type: CreateOtherDto })
   async createOtherPeople(
     @Res() res: Response,
     @Body() createOtherDto: CreateOtherDto,
@@ -36,6 +43,9 @@ export class OtherPeopleController {
   }
 
   @Get('/all/:personId')
+  @ApiOperation({
+    summary: 'User enter personId to find all other-person belongs to person',
+  })
   async getAllOtherPeopleByPersonId(
     @Param('personId') id: string,
     @Res() res: Response,
@@ -48,6 +58,9 @@ export class OtherPeopleController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'User finds an other-person by id',
+  })
   async getOneOtherPeople(@Param('id') id: string, @Res() res: Response) {
     const person = await this.otherService.getOneOtherPeople(id);
     return res.status(HttpStatus.OK).json({
@@ -57,10 +70,14 @@ export class OtherPeopleController {
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Admin update an other-person',
+  })
+  @ApiBody({ type: CreateOtherDto })
   async updateOtherPeople(
     @Res() res: Response,
     @Param('id') id: string,
-    @Body() updateOtherDto: UpdateOtherDto,
+    @Body() updateOtherDto: CreateOtherDto,
   ) {
     const person = await this.otherService.updateOtherPeople(
       id,

@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { BaseServiceAbstract } from '../../services/base/base.abstract.service';
 import { Person } from '../../entities/person.entity';
 import { PersonRepositoryInterface } from './interfaces/person.interface';
@@ -40,7 +45,7 @@ export class PersonService extends BaseServiceAbstract<Person> {
 
     if (!parentNode) {
       // return null;
-      throw new BadRequestException(Key_Error_Person.CANNOT_CREATE_PERSON);
+      throw new NotFoundException(Key_Error_Person.NOT_FOUND_PERSON);
     }
 
     const newPerson = await this.personRepository.create({
@@ -48,6 +53,9 @@ export class PersonService extends BaseServiceAbstract<Person> {
       parent: parentNode,
       ancestors: parentNode.ancestors.concat(parentNode),
     });
+    if (!newPerson) {
+      throw new BadRequestException(Key_Error_Person.CANNOT_CREATE_PERSON);
+    }
     return newPerson;
   }
   async getAllPerson(
@@ -86,6 +94,10 @@ export class PersonService extends BaseServiceAbstract<Person> {
     updatePersonDto: UpdatePersonDto,
     email?: string,
   ) {
+    const checkPerson = await this.personRepository.findOneById(id);
+    if (!checkPerson) {
+      throw new BadRequestException(Key_Error_Person.NOT_FOUND_PERSON);
+    }
     const checkEmail = await this.personRepository.findOneByCondition({
       email,
       _id: { $nin: id },

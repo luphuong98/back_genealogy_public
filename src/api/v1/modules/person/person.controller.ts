@@ -17,12 +17,73 @@ import { Request, Response } from 'express';
 import { Key_Success_Person } from '../../common/helpers/responses';
 import { UpdatePersonDto } from './dtos/update-person.dto';
 import { ConditionPerson } from './interfaces/search.interface';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('persons')
 @Controller('person')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
   @Get('search')
+  @ApiOperation({
+    summary: 'User can search with name, email, phone, address',
+  })
+  @ApiQuery({
+    name: 'name',
+    description: 'Name of the person',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'phone',
+    description: 'Phone number of the person',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'email',
+    description: 'Email address of the person',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'address',
+    description: 'Address of the person',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    examples: {
+      '1': {
+        value: 1,
+        description: 'Start from page 1',
+      },
+      '10': {
+        value: 10,
+        description: `Skip 10 page`,
+      },
+    },
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    examples: {
+      '10': {
+        value: 10,
+        description: `Get 10 person`,
+      },
+      '50': {
+        value: 50,
+        description: `Get 50 person`,
+      },
+    },
+    required: false,
+  })
   async searchPerson(
     @Res() res: Response,
     @Query('name') full_name = '',
@@ -57,6 +118,14 @@ export class PersonController {
     });
   }
   @Post()
+  @ApiOperation({
+    summary: 'Admin create a new person',
+    description:
+      '- Add person_id to determine if person has a father or not\n' +
+      '\n- person_id is not required\n' +
+      '\n- can add person_id to body\n',
+  })
+  @ApiBody({ type: CreatePersonDto })
   async createNewPerson(
     @Res() res: Response,
     @Body() createNewPersonDto: CreatePersonDto,
@@ -67,7 +136,6 @@ export class PersonController {
       createNewPersonDto,
       parent_id,
     );
-
     if (!newPerson) {
       // throw new BadRequestException(Key_Error_Person.CANNOT_CREATE_PERSON);
       return newPerson;
@@ -79,6 +147,9 @@ export class PersonController {
   }
 
   @Get()
+  @ApiOperation({
+    summary: 'User get get all person',
+  })
   async getAllPerson(@Res() res: Response) {
     const allPerson = await this.personService.getAllPerson();
     return res.status(HttpStatus.OK).json({
@@ -88,6 +159,9 @@ export class PersonController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'User can get one person',
+  })
   async getOnePerson(@Param('id') id: string, @Res() res: Response) {
     const condition: ConditionPerson = { _id: id };
     const page = 1;
@@ -104,10 +178,17 @@ export class PersonController {
   }
 
   @Patch(':id')
+  @ApiBody({ type: CreatePersonDto })
+  @ApiOperation({
+    summary: 'Admin can update a person',
+    description:
+      '- Enter person_id to determine if person has a father or not\n' +
+      '\n- person_id is not required',
+  })
   async updatePerson(
     @Res() res: Response,
     @Param('id') id: string,
-    @Body() updatePersonDto: UpdatePersonDto,
+    @Body() updatePersonDto: CreatePersonDto,
     @Req() req: Request,
   ) {
     const email = req.body?.email;
@@ -126,6 +207,9 @@ export class PersonController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Admin can delete a person',
+  })
   async deletePerson(@Param('id') id: string, @Res() res: Response) {
     const person = await this.personService.permanentlyDelete(id);
     return res.status(HttpStatus.OK).json({

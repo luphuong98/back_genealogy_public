@@ -79,10 +79,10 @@ export class Person extends BaseEntity {
   })
   parent: Person;
 
-  // @Expose({ name: 'full_name' })
-  // get fullName(): string {
-  //   return `${this.extra_info.first_name} ${this.extra_info.last_name}`;
-  // }
+  @Expose({ name: 'full_name_hung' })
+  get fullName(): string {
+    return `${this.extra_info.first_name} ${this.extra_info.last_name}`;
+  }
   // @Expose({ name: 'birth_death_date' })
   // get birthDeathDate(): string {
   //   return `${this.extra_info.birthday}-${this.extra_info.dead_day}`;

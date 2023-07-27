@@ -85,7 +85,7 @@ export class ExtraInfo extends BaseEntity {
   address: string;
 
   @Prop({
-    default: '',
+    default: [],
   })
   note: string[];
 }
