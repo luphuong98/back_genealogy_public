@@ -19,3 +19,8 @@ export const Key_Success_Other = {
   CREATE_OTHER: 'Create-New-Other-People-Successfully',
   UPDATE_OTHER: 'Update-Other-People-Successfully',
 };
+
+export const Key_Success_User = {
+  CREATE_USER: 'Create-New-User-Successfully',
+  UPDATE_USER: 'Update-User-Successfully',
+};

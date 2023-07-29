@@ -8,6 +8,10 @@ import { DBValidationModule } from './config/database/db-validation.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MarriagePersonModule } from '@modules/marriage_person/marriage-person.module';
 import { OtherPeopleModule } from './api/v1/modules/other_people/other_people.module';
+import { AuthController } from './api/v1/modules/auth/auth.controller';
+import { AuthService } from './api/v1/modules/auth/auth.service';
+import { AuthModule } from './api/v1/modules/auth/auth.module';
+import { UserModule } from './api/v1/modules/user/user.module';
 
 @Module({
   imports: [
@@ -34,6 +38,8 @@ import { OtherPeopleModule } from './api/v1/modules/other_people/other_people.mo
     DBValidationModule,
     MarriagePersonModule,
     OtherPeopleModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { OtherPeopleService } from './other_people.service';
 import { CreateOtherDto } from './dtos/create-other.dto';
@@ -17,7 +18,8 @@ import {
   Key_Success_Other,
 } from '../../common/helpers/responses';
 import { UpdateOtherDto } from './dtos/update-other.dto';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAccessTokenGuard } from '@modules/auth/guards/jwt-access-token.guard';
 
 @ApiTags('other-people(sons-daughters)')
 @Controller('other-people')
@@ -25,6 +27,8 @@ export class OtherPeopleController {
   constructor(private readonly otherService: OtherPeopleService) {}
 
   @Post()
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   @ApiOperation({
     summary: 'Admin create a new other person',
     description: '- person is required',
@@ -70,6 +74,8 @@ export class OtherPeopleController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   @ApiOperation({
     summary: 'Admin update an other-person',
   })
@@ -90,6 +96,8 @@ export class OtherPeopleController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   async deleteMarriagePerson(@Param('id') id: string, @Res() res: Response) {
     const person = await this.otherService.permanentlyDelete(id);
     return res.status(HttpStatus.OK).json({

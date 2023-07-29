@@ -92,7 +92,7 @@ export class PersonService extends BaseServiceAbstract<Person> {
   async updatePerson(
     id: string,
     updatePersonDto: UpdatePersonDto,
-    email?: string,
+    email: string,
   ) {
     const checkPerson = await this.personRepository.findOneById(id);
     if (!checkPerson) {

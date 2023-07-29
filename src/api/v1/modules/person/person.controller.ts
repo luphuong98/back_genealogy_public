@@ -10,20 +10,25 @@ import {
   Query,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { CreatePersonDto } from './dtos/create-person.dto';
 import { PersonService } from './person.service';
 import { Request, Response } from 'express';
 import { Key_Success_Person } from '../../common/helpers/responses';
-import { UpdatePersonDto } from './dtos/update-person.dto';
 import { ConditionPerson } from './interfaces/search.interface';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
-  ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { Public } from '../../common/decorators/metadata/auth.decorator';
+import { JwtAccessTokenGuard } from '@modules/auth/guards/jwt-access-token.guard';
+import { RolesGuard } from '@modules/auth/guards/roles.guard';
+import { Roles } from '../../common/decorators/metadata/roles.decorator';
+import { USER_ROLE } from '../../common/shared/enum/user-role.enum';
 
 @ApiTags('persons')
 @Controller('person')
@@ -118,6 +123,8 @@ export class PersonController {
     });
   }
   @Post()
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   @ApiOperation({
     summary: 'Admin create a new person',
     description:
@@ -150,7 +157,7 @@ export class PersonController {
   @ApiOperation({
     summary: 'User get get all person',
   })
-  async getAllPerson(@Res() res: Response) {
+  async findAll(@Res() res: Response) {
     const allPerson = await this.personService.getAllPerson();
     return res.status(HttpStatus.OK).json({
       message: Key_Success_Person.GET_ALL_PERSON,
@@ -178,6 +185,8 @@ export class PersonController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   @ApiBody({ type: CreatePersonDto })
   @ApiOperation({
     summary: 'Admin can update a person',
@@ -191,7 +200,7 @@ export class PersonController {
     @Body() updatePersonDto: CreatePersonDto,
     @Req() req: Request,
   ) {
-    const email = req.body?.email;
+    const email = req.body.email;
     const person = await this.personService.updatePerson(
       id,
       updatePersonDto,
@@ -207,6 +216,10 @@ export class PersonController {
   }
 
   @Delete(':id')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   @ApiOperation({
     summary: 'Admin can delete a person',
   })

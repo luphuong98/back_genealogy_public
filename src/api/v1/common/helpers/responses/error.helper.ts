@@ -19,7 +19,7 @@ export const Key_Error_Other = {
   CANNOT_UPDATE_OTHER: 'Cannot-Update-Other-People',
 };
 
-export const Key_Error = {
+export const Key_Error_User = {
   PASSWORD_NOT_MATCH: 'PassWord does not Match',
   EMAIL_NOT_MATCH: 'Email does not Match',
   CONFIRM_YOUR_EMAIL_FIRST: 'Confirm your email first',
@@ -30,22 +30,12 @@ export const Key_Error = {
   TOKEN_IS_WRONG: 'Token  email is wrong',
   EMAIL_CONFIRM_TOKEN_EXPIRED: 'Email confirmation token expired',
   BAD_CONFIRM_TOKEN: 'Bad confirmation token',
-};
-export const Key_Error_Product = {
-  ITEM_NOT_EXIST: 'Item does not exist',
-  CART_NOT_EXIST: 'Cart does not exist',
-  CART_EMPTY: 'Cart empty',
-  PRODUCT_NOT_FOUND: 'Product not found',
-  CANNOT_UPDATE: 'Cannot update product',
-  PRODUCT_INVENTORY_NOT_FOUND: 'Product Inventory not found',
-};
-
-export const Key_Error_Category = {
-  CATEGORY_NOT_FOUND: 'Category not found',
-  CANNOT_CATEGORY: 'Cannot update category',
-};
-
-export const Key_Error_Order = {
-  CHECK_OUT_FAIL: 'Checkout Failed',
-  INSUFFICIENT_QUANTITY: 'Insufficient inventory',
+  WRONG_CREDENTIAL: 'Wrong credentials!!',
+  EMAIL_MUST_BE_EMAIL: 'email must be an email',
+  PASSWORD_ENOUGH: 'password is not strong enough',
+  USERNAME_EXIST: 'Username already existed',
+  USER_NOT_FOUND: 'User not found',
+  USERNAME_ALREADY_EXISTS: 'User-name-already-exists',
+  CANNOT_CREATE_USER: 'Cannot-Create-New-User',
+  CANNOT_UPDATE_USER: 'Cannot-Update-User',
 };
