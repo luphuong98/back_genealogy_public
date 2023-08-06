@@ -9,13 +9,15 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { MarriagePersonService } from './marriage-person.service';
 import { Request, Response } from 'express';
 import { CreateMarriageDto } from './dtos/create-marriage.dto';
 import { Key_Success_Marriage } from '../../common/helpers/responses';
 import { UpdateMarriageDto } from './dtos/update-marriage.dto';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAccessTokenGuard } from '@modules/auth/guards/jwt-access-token.guard';
 
 @ApiTags('marriage-person(wives-husbands)')
 @Controller('marriage-person')
@@ -23,6 +25,8 @@ export class MarriagePersonController {
   constructor(private readonly marriageService: MarriagePersonService) {}
 
   @Post()
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   @ApiOperation({
     summary: 'Admin create a new marriage person',
     description: '- person is required',
@@ -74,6 +78,8 @@ export class MarriagePersonController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   @ApiOperation({
     summary: 'Admin update a marriage-person',
   })
@@ -97,6 +103,8 @@ export class MarriagePersonController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiBearerAuth('token')
   async deleteMarriagePerson(@Param('id') id: string, @Res() res: Response) {
     const person = await this.marriageService.permanentlyDelete(id);
     return res.status(HttpStatus.OK).json({

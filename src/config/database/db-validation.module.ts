@@ -7,7 +7,7 @@ import * as Joi from 'joi';
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         PORT: Joi.number().default(3000),
-        // JWT_SECRET: Joi.string().required(),
+        // JWT_TOKEN_SECRET: Joi.string().required(),
         // JWT_EXPIRATION_TIME: Joi.string().required(),
         // JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
         // JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
