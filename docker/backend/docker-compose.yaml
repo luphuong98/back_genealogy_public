@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  mongodb:
+    container_name: genealogy-mongodb
+    image: mongo:6-jammy
+    restart: always
+    ports:
+      - '27018:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: luphuong98
+      MONGO_INITDB_ROOT_PASSWORD: hunglp98
+      MONGO_INITDB_DATABASE: genealogy
+    expose:
+      - 27017
+
+  backend:
+    build:
+      context: ../../../back_genealogy
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - DB_HOST=27017
+      - DB_HOST=mongodb
+      # - DB_HOST=host.docker.internal
+    ports:
+      - 3000:3000
+#### docker compose -p genealogy-nodejs-mongodb up -d
